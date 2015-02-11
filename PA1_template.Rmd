@@ -1,7 +1,7 @@
 ---
 title: "Reproducible Research: <br>Peer Assessment 1"
 author: "Sergio Vicente"
-twitter: "svicenet99"
+twitter: "@svicente99"
 date: "February 10th 2015"
 output: 
   html_document:
@@ -26,6 +26,7 @@ The variables included in this dataset are:
 
 The dataset is stored in a comma-separated-value (CSV) file and there are a total of 17,568 observations in this dataset.
 
+---------
 
 ### Loading and preprocessing the data
 
@@ -49,7 +50,7 @@ head(df)
 
    (not necessary in this case)
 
-
+---------
 
 ### What is mean total number of steps taken per day?
 
@@ -91,6 +92,8 @@ abline(h=medianTotalStepsByDay, col="red")
 
 ```
 
+---------
+
 ### What is the average daily activity pattern?
 
 1. We construct a time series of the average number of steps taken per day, measured
@@ -128,7 +131,7 @@ maxSteps <- stepsByInterval$interval[which.max(stepsByInterval$steps)]
 paste("Major number of steps along day =",maxSteps)
 ```
 
-
+---------
 
 ### Imputing missing values
 
@@ -192,28 +195,53 @@ What is the impact of imputing missing data on the estimates of the total daily 
 ==> _**Very low**. Because we replaced all 'NA's by mean, median value just turned out the same value of mean._
 
 
+---------
 
 ### Are there differences in activity patterns between weekdays and weekends?
 
-This part uses the <a target="_blank" href="http://127.0.0.1:18536/library/base/html/weekday.POSIXt.html">"weekdays()"</a> function. We also use the dataset with the filled-in missing values just set before.
+This part uses the <a target="_blank" href="http://127.0.0.1:26327/library/base/html/as.POSIXlt.html">"POSIXlt()"</a> function. We also use the dataset with the filled-in missing values just set before.
 
 1. Create a new factor variable in the dataset with two levels – “weekday” and “weekend” indicating whether a given date is a weekday or weekend day.
 
 To do this let's create first a function to point out what day belongs to weekday or not.
 
 ```{r}
-week_period <- function(date) {
-  nDay <- as.POSIXlt(date$wday) 
-  return( ifelse(nDay == 0 OR nDay == 6, 'weekend', 'weekday') )
+vTpDays <- c("Weekend", "Weekday")
+
+week_period <- function(v_date) {
+  d <- as.POSIXlt(as.Date(v_date))$wday
+  return( ifelse(d == 0 || d == 6, vTpDays[1], vTpDays[2]) )
 }
 ```
 
-And then, we create a new column named 'day_type' and apply this function to evaluate its value
+And then, we create a new column named 'tpDay' and apply this function to evaluate its value
 
 ```{r}
-df$day_type <- as.factor( sapply(df$date, week_period) )
+df$tpDay <- as.factor( sapply(df$date, week_period) )
 head(df)
 ```
 
 
 2. Make a panel plot containing a time series plot of the 5-minute interval (x-axis) and the average number of steps taken, averaged across all weekday days or weekend days (y-axis). 
+
+```{r}
+## create a panel layout 2x1 and establish margin values
+par(mfrow=c(2, 1), mar=c(3, 3, 2, 1), oma=c(1.5, 1, 2, 1)) 
+
+## plot both line graphs side by side showing differences
+for( td in vTpDays ) {
+    stepsByTpDay <- aggregate(steps_2 ~ interval, data = df, subset = (df$tpDay == td), FUN = mean)
+    plot(stepsByTpDay, type = "l", main = td, xlab="", ylab="", ylim=c(0,250), xlim=c(0,2400), 
+    panel.first=grid(), col.axis='white')
+
+    xMarks <- seq(from = 0, to = 2400, by = 100)
+    axis(1, at=xMarks, col.axis="blue", las=2, tck=0.02)
+    yMarks <- seq(from = 0, to = 250, by = 50)
+    axis(2, at=yMarks, col.axis="blue", las=2, tck=0.02)
+}
+mtext( "interval (5-minute)", side=1, outer=TRUE, col="blue", font=1 )  
+mtext( "Mean number of steps", side=2, outer=TRUE, col="blue", font=1, cex=0.9 )  
+mtext( "Activity patterns between weekdays and weekends", side=3, outer=TRUE, col="maroon", font=2 )  
+box("outer", col="maroon") 
+```
+
