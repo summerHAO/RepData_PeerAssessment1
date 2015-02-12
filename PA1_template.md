@@ -260,7 +260,7 @@ What is the impact of imputing missing data on the estimates of the total daily 
 
 This part uses the <a target="_blank" href="http://127.0.0.1:26327/library/base/html/as.POSIXlt.html">"POSIXlt()"</a> function. We also use the dataset with the filled-in missing values just set before.
 
-1. Create a new factor variable in the dataset with two levels - "weekday" and "weekend" indicating whether a given date is a weekday or weekend day.
+1. Create a new factor variable in the dataset with two levels – “weekday” and “weekend” indicating whether a given date is a weekday or weekend day.
 
 To do this let's create first a function to point out what day belongs to weekday or not.
 

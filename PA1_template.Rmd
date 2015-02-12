@@ -224,7 +224,7 @@ head(df)
 
 2. Make a panel plot containing a time series plot of the 5-minute interval (x-axis) and the average number of steps taken, averaged across all weekday days or weekend days (y-axis). 
 
-```{r}
+```{r fig.height=6,fig.width=8}
 ## create a panel layout 2x1 and establish margin values
 par(mfrow=c(2, 1), mar=c(3, 3, 2, 1), oma=c(1.5, 1, 2, 1)) 
 
