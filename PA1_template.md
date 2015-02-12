@@ -4,7 +4,7 @@ February 10th 2015
 
 You may get source code of this at <https://github.com/svicente99/RepData_PeerAssessment1> 
 
-And html version is available at RPubs: <http://rpubs.com/svicente99/ReprodResearch_Peer_Assesment1>
+And html version is available at RPubs: <http://rpubs.com/svicente99/RepData_PeerAssessment1>
 
 ### Data
 
